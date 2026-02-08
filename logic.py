@@ -2,7 +2,6 @@ import math
 
 
 def analyze_password(password):
-    # 1. הגדרת מאגרי התווים
     has_lower = any(c.islower() for c in password)
     has_upper = any(c.isupper() for c in password)
     has_digit = any(c.isdigit() for c in password)
@@ -41,7 +40,6 @@ def format_time(seconds):
     if seconds < 1:
         return "Instantly"
 
-    # הגדרת יחידות זמן
     units = [
         (31536000, "years"),
         (86400, "days"),
