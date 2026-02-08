@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מנתח חוזק סיסמה - PassShield</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #16213e;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            width: 350px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-top: 1px solid #0f3460;
+        }
+        .time {
+            font-weight: bold;
+            color: #e94560;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PassShield</h1>
+        <p>...thought your password is strong? think again</p>
+        <input type="password" id="passwordInput" placeholder="...enter your password here" oninput="checkPassword()">
+
+        <div class="result" id="resultArea" style="display:none;">
+            <div>Estimated cracking time:</div>
+            <div class="time" id="crackTime"></div>
+            <div id="scoreLabel"></div>
+        </div>
+    </div>
+
+    <script>
+        async function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const resultArea = document.getElementById('resultArea');
+
+            if (password.length === 0) {
+                resultArea.style.display = 'none';
+                return;
+            }
+
+            const response = await fetch('/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: password })
+            });
+
+            const data = await response.json();
+
+            resultArea.style.display = 'block';
+            document.getElementById('crackTime').innerText = data.human_time;
+            document.getElementById('scoreLabel').innerText = "Strength index: " + data.score + "/5";
+        }
+    </script>
+</body>
+</html>
