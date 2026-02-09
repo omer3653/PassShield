@@ -14,7 +14,7 @@ def get_personal_info_warnings(password):
         warnings.append(
             "Warning: This my looks like an ID number. Personal identifiers are highly vulnerable to targeted attacks.")
 
-    if re.search(r'(\d)\1{4,}', password):
+    if re.search(r'(.)\1{4,}', password):
         warnings.append("Warning: Avoid using long sequences of the same character.")
 
     return warnings
