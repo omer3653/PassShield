@@ -42,6 +42,16 @@
             color: #e94560;
             font-size: 1.2rem;
         }
+        .warning {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            text-align: left;
+            direction: ltr;
+        }
     </style>
 </head>
 <body>
@@ -55,6 +65,7 @@
             <div>Estimated cracking time:</div>
             <div class="time" id="crackTime"></div>
             <div id="scoreLabel"></div>
+            <div id="warningsArea"></div>
         </div>
     </div>
 
@@ -79,6 +90,17 @@
             resultArea.style.display = 'block';
             document.getElementById('crackTime').innerText = data.human_time;
             document.getElementById('scoreLabel').innerText = "Strength index: " + data.score + "/5";
+            const warningsArea = document.getElementById('warningsArea');
+            warningsArea.innerHTML = "";
+
+            if (data.warnings && data.warnings.length > 0) {
+                data.warnings.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'warning';
+                    div.innerText = "⚠️ " + msg;
+                    warningsArea.appendChild(div);
+                });
+            }
         }
     </script>
 </body>
