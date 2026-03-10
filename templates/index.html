@@ -52,15 +52,29 @@
             text-align: left;
             direction: ltr;
         }
+        .last-modified {
+            position: fixed;
+            bottom: 18px;
+            left: 18px;
+            background: rgba(15, 52, 96, 0.85);
+            border: 1px solid #0f3460;
+            color: #a0b4c8;
+            font-size: 0.72rem;
+            padding: 5px 10px;
+            border-radius: 8px;
+            direction: ltr;
+        }
+        .last-modified span {
+            color: #e94560;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
         <h1>PassShield</h1>
         <p>...thought your password is strong? think again</p>
         <input type="password" id="passwordInput" placeholder="...enter your password here" oninput="checkPassword()">
-
         <div class="result" id="resultArea" style="display:none;">
             <div>Estimated cracking time:</div>
             <div class="time" id="crackTime"></div>
@@ -69,30 +83,29 @@
         </div>
     </div>
 
+    <div class="last-modified">
+        Last modified: <span>{{ last_modified }}</span>
+    </div>
+
     <script>
         async function checkPassword() {
             const password = document.getElementById('passwordInput').value;
             const resultArea = document.getElementById('resultArea');
-
             if (password.length === 0) {
                 resultArea.style.display = 'none';
                 return;
             }
-
             const response = await fetch('/check', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password: password })
             });
-
             const data = await response.json();
-
             resultArea.style.display = 'block';
             document.getElementById('crackTime').innerText = data.human_time;
             document.getElementById('scoreLabel').innerText = "Strength index: " + data.score + "/5";
             const warningsArea = document.getElementById('warningsArea');
             warningsArea.innerHTML = "";
-
             if (data.warnings && data.warnings.length > 0) {
                 data.warnings.forEach(msg => {
                     const div = document.createElement('div');
